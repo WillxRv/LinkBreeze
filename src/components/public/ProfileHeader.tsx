@@ -77,7 +77,7 @@ export function ProfileHeader({ profile }: ProfileHeaderProps) {
 
       {profile.bio ? (
         <p
-          className="mt-2 max-w-md text-sm leading-relaxed opacity-80"
+          className="mt-2 max-w-md text-sm leading-relaxed opacity-90"
           style={{ color: "var(--lb-text-muted)" }}
         >
           {profile.bio}

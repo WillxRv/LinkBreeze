@@ -61,6 +61,19 @@ function getTypeIconSvg(type: string): string | null {
   }
 }
 
+function getTypeIconColor(type: string): string {
+  switch (type) {
+    case "whatsapp":
+      return "#25D366";
+    case "email":
+      return "#EA4335";
+    case "sms":
+      return "#3B82F6";
+    default:
+      return "var(--lb-card-text)";
+  }
+}
+
 /**
  * Build the icon element shown before the title.
  * Priority: auto-fetched favicon (iconUrl) → type-specific SVG icon → first-letter avatar fallback.
@@ -74,7 +87,8 @@ function buildIcon(link: LinkRow): string {
 
   const typeSvg = getTypeIconSvg(link.type);
   if (typeSvg) {
-    return `<span aria-hidden="true" style="width:20px;height:20px;border-radius:4px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;color:var(--lb-card-text);opacity:.9">${typeSvg}</span>`;
+    const iconColor = getTypeIconColor(link.type);
+    return `<span aria-hidden="true" style="width:20px;height:20px;border-radius:4px;flex-shrink:0;display:inline-flex;align-items:center;justify-content:center;color:${iconColor};opacity:.95">${typeSvg}</span>`;
   }
 
   // First-letter fallback using the title's initial.

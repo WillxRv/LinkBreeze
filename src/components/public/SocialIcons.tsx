@@ -35,7 +35,7 @@ export function SocialIcons({ socialLinks }: SocialIconsProps) {
           target="_blank"
           rel="noopener noreferrer"
           aria-label="${label}"
-          style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:9999px;background:var(--lb-card-bg);color:var(--lb-text);border:var(--lb-border-width) solid var(--lb-card-border);transition:transform .15s ease,background .15s ease,border-color .15s ease;backdrop-filter:blur(var(--lb-blur));-webkit-backdrop-filter:blur(var(--lb-blur))"
+          style="display:inline-flex;align-items:center;justify-content:center;width:42px;height:42px;border-radius:9999px;background:var(--lb-card-bg);color:var(--lb-card-text);border:var(--lb-border-width) solid var(--lb-card-border);transition:transform .15s ease,background .15s ease,border-color .15s ease;backdrop-filter:blur(var(--lb-blur));-webkit-backdrop-filter:blur(var(--lb-blur))"
           onmouseover="this.style.transform='translateY(-2px)';this.style.background='var(--lb-card-border)';this.style.borderColor='var(--lb-accent)'"
           onmouseout="this.style.transform='none';this.style.background='var(--lb-card-bg)';this.style.borderColor='var(--lb-card-border)'"
         >${svg}</a>`;

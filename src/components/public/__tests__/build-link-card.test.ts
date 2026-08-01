@@ -74,7 +74,7 @@ describe("buildLinkCardHtml", () => {
 
   it("uses CSS custom properties instead of hardcoded colors", () => {
     const html = buildLinkCardHtml({ link: baseLink, theme, index: 0 });
-    expect(html).toContain("var(--lb-text)");
+    expect(html).toContain("var(--lb-card-text)");
     expect(html).toContain("var(--lb-accent)");
     expect(html).toContain("var(--lb-card-bg)");
     expect(html).toContain("var(--lb-card-radius)");

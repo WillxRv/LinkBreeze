@@ -77,7 +77,7 @@ function buildContentRow(link: LinkRow): string {
       ${description}
     </span>
     ${icon}
-    <span aria-hidden="true" style="margin-left:10px;opacity:.6;font-size:18px;color:var(--lb-accent)">&#8599;</span>`;
+    <span aria-hidden="true" style="margin-left:10px;opacity:.6;font-size:18px;color:var(--lb-card-text)">&#8599;</span>`;
 }
 
 /**
@@ -158,7 +158,7 @@ export function buildLinkCardHtml(options: {
     ${display};flex:1;text-decoration:none;width:100%;box-sizing:border-box;
     ${paddingStyle}margin:0 0 var(--lb-spacing);
     background:var(--lb-card-bg);border:${border};border-radius:var(--lb-card-radius);
-    color:var(--lb-text);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
+    color:var(--lb-card-text);transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;
     ${backdropBlur}${overflow}${reveal}
   "
 >

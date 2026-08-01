@@ -114,6 +114,7 @@ function ColorsSection({ active }: { active: ThemeRow }) {
         <ColorField label="Muted text" name="mutedTextColor" defaultValue={active.mutedTextColor} />
         <ColorField label="Card background" name="cardBackground" defaultValue={active.cardBackground} allowRgba />
         <ColorField label="Card border" name="cardBorderColor" defaultValue={active.cardBorderColor} allowRgba />
+        <ColorField label="Card text" name="cardTextColor" defaultValue={active.cardTextColor} />
       </div>
     </section>
   );

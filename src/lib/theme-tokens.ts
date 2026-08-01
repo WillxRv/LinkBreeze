@@ -55,6 +55,7 @@ export interface ThemeInput {
   secondaryColor?: string | null;
   cardBackground?: string | null;
   cardBorderColor?: string | null;
+  cardTextColor?: string | null;
   textColor?: string | null;
   mutedTextColor?: string | null;
 
@@ -112,6 +113,7 @@ const FALLBACKS = {
   secondary: "#a78bfa",
   cardBg: "rgba(255,255,255,0.06)",
   cardBorder: "rgba(167,139,250,0.16)",
+  cardText: "var(--lb-text)",
   textMuted: "rgba(236,234,254,0.7)",
   font: "var(--font-sans), sans-serif",
   radius: "12px",
@@ -306,6 +308,7 @@ export function resolveThemeTokens(theme: ThemeInput): ThemeTokens {
   const textMuted = str(theme.mutedTextColor, FALLBACKS.textMuted);
   const cardBg = str(theme.cardBackground, FALLBACKS.cardBg);
   const cardBorder = str(theme.cardBorderColor, FALLBACKS.cardBorder);
+  const cardText = theme.cardTextColor && theme.cardTextColor.trim() ? theme.cardTextColor.trim() : text;
 
   const cardRadius = resolveCardRadius(linkStyle, theme.radius);
   const btnPad = resolveButtonPadding(theme.buttonSize);
@@ -335,6 +338,7 @@ export function resolveThemeTokens(theme: ThemeInput): ThemeTokens {
     "--lb-text-muted": textMuted,
     "--lb-card-bg": cardBg,
     "--lb-card-border": cardBorder,
+    "--lb-card-text": cardText,
     "--lb-card-radius": cardRadius,
     "--lb-font": font,
     "--lb-font-size": fontSize,

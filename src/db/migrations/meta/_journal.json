@@ -83,7 +83,14 @@
       "idx": 11,
       "version": "6",
       "when": 1785613821736,
-      "tag": "0011_lazy_imperial_guard",
+      "tag": "0011_add_link_groups_columns",
+      "breakpoints": true
+    },
+    {
+      "idx": 12,
+      "version": "6",
+      "when": 1785626496038,
+      "tag": "0012_add_card_text_color",
       "breakpoints": true
     }
   ]

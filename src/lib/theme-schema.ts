@@ -49,6 +49,7 @@ export const customSchema = z.object({
   secondaryColor: cssColor.optional(),
   cardBackground: z.string().max(60).optional(),
   cardBorderColor: z.string().max(60).optional(),
+  cardTextColor: z.union([cssColor, z.literal(""), z.null()]).optional(),
   textColor: cssColor.optional(),
   mutedTextColor: cssColor.optional(),
   mode: z.enum(["light", "dark"]).optional(),

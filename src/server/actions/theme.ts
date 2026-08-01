@@ -43,6 +43,7 @@ export async function customizeActiveTheme(formData: FormData): Promise<ActionRe
     secondaryColor: formData.get("secondaryColor") || undefined,
     cardBackground: formData.get("cardBackground") || undefined,
     cardBorderColor: formData.get("cardBorderColor") || undefined,
+    cardTextColor: formData.get("cardTextColor") || undefined,
     textColor: formData.get("textColor") || undefined,
     mutedTextColor: formData.get("mutedTextColor") || undefined,
     mode: formData.get("mode") || undefined,

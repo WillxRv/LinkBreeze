@@ -10,28 +10,22 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { formatDateLabel } from "@/lib/i18n";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface ChartProps {
   data: Array<{ date: string; views: number; clicks: number }>;
 }
 
-function formatDate(iso: string): string {
-  const d = new Date(iso + "T00:00:00Z");
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
-
 export function ViewsChart({ data }: ChartProps) {
+  const { lang, t } = useLanguage();
   const chartData = React.useMemo(
     () =>
       data.map((d) => ({
         ...d,
-        label: formatDate(d.date),
+        label: formatDateLabel(d.date, lang),
       })),
-    [data],
+    [data, lang],
   );
 
   return (
@@ -79,7 +73,7 @@ export function ViewsChart({ data }: ChartProps) {
             stroke="var(--primary)"
             strokeWidth={2}
             fill="url(#viewsGrad)"
-            name="Views"
+            name={t("Analytics.views", "Views")}
           />
           <Area
             type="monotone"
@@ -87,7 +81,7 @@ export function ViewsChart({ data }: ChartProps) {
             stroke="var(--chart-4)"
             strokeWidth={2}
             fill="url(#clicksGrad)"
-            name="Clicks"
+            name={t("Analytics.clicks", "Clicks")}
           />
         </AreaChart>
       </ResponsiveContainer>

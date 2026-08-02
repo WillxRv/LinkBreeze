@@ -10,25 +10,18 @@ import {
   Tooltip,
   CartesianGrid,
 } from "recharts";
+import { formatDateLabel } from "@/lib/i18n";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface ChartProps {
   data: Array<{ date: string; clicks: number }>;
 }
 
-function formatDate(iso: string): string {
-  const d = new Date(iso + "T00:00:00Z");
-  return d.toLocaleDateString("en-US", {
-    month: "short",
-    day: "numeric",
-    timeZone: "UTC",
-  });
-}
-
-/** Clicks-only area chart for the per-link drill-down. */
 export function ClicksChart({ data }: ChartProps) {
+  const { lang, t } = useLanguage();
   const chartData = React.useMemo(
-    () => data.map((d) => ({ ...d, label: formatDate(d.date) })),
-    [data],
+    () => data.map((d) => ({ ...d, label: formatDateLabel(d.date, lang) })),
+    [data, lang],
   );
 
   return (
@@ -72,7 +65,7 @@ export function ClicksChart({ data }: ChartProps) {
             stroke="var(--chart-4)"
             strokeWidth={2}
             fill="url(#clicksGrad2)"
-            name="Clicks"
+            name={t("Analytics.clicks", "Clicks")}
           />
         </AreaChart>
       </ResponsiveContainer>

@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getDictionary, translate, DEFAULT_LANGUAGE } from "../index";
+import { getDictionary, translate, DEFAULT_LANGUAGE, formatDateLabel } from "../index";
 import enDict from "../../../../messages/en.json";
 import ptBrDict from "../../../../messages/pt-BR.json";
 
@@ -58,5 +58,13 @@ describe("i18n system", () => {
   it("falls back to key path when translation key is missing", () => {
     const val = translate("en", "NonExistent.Key.Path");
     expect(val).toBe("NonExistent.Key.Path");
+  });
+
+  it("formats date label using configured locale and timezone", () => {
+    const formattedPt = formatDateLabel("2026-08-01T12:00:00Z", "pt-BR", "America/Sao_Paulo");
+    expect(formattedPt).toContain("1 de ago.");
+
+    const formattedEn = formatDateLabel("2026-08-01T12:00:00Z", "en", "UTC");
+    expect(formattedEn).toContain("Aug 1");
   });
 });

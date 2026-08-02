@@ -38,7 +38,7 @@ export const SUPPORTED_PLATFORMS: SocialPlatform[] = [
 
 const PLATFORM_LABELS: Record<SocialPlatform, string> = {
   instagram: "Instagram", tiktok: "TikTok", youtube: "YouTube",
-  twitter: "X (Twitter)", github: "GitHub", discord: "Discord",
+  twitter: "X (Twitter)", x: "X (Twitter)", github: "GitHub", discord: "Discord",
   twitch: "Twitch", spotify: "Spotify", linkedin: "LinkedIn",
   telegram: "Telegram", whatsapp: "WhatsApp", email: "Email",
   threads: "Threads", bluesky: "Bluesky", mastodon: "Mastodon",

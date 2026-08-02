@@ -181,6 +181,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
+import { LanguageProvider } from "@/components/providers/language-provider";
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -191,7 +193,9 @@ export default function RootLayout({
       lang="en"
       className={`${clashDisplay.variable} ${satoshi.variable} ${geistMono.variable} ${inter.variable} ${poppins.variable} ${playfair.variable} ${jetbrains.variable} ${spaceGrotesk.variable} ${dmSans.variable} ${lora.variable} ${bebas.variable} ${sora.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <LanguageProvider>{children}</LanguageProvider>
+      </body>
     </html>
   );
 }

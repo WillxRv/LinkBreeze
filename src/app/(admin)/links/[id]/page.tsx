@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { RangePicker } from "@/app/(admin)/dashboard/range-picker";
 import { ClicksChart } from "./clicks-chart";
+import { translate } from "@/lib/i18n";
 
 export const dynamic = "force-dynamic";
 
@@ -47,7 +48,7 @@ export default async function LinkDetailPage({
           className="mb-3 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-4" />
-          Back to links
+          {translate(null, "Links.backToLinks", "Back to links")}
         </Link>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
           {link.title}
@@ -61,15 +62,15 @@ export default async function LinkDetailPage({
           <span className="font-medium text-foreground">
             {totalClicks.toLocaleString()}
           </span>{" "}
-          clicks in range
+          {translate(null, "Links.clicksInRange", "clicks in range")}
         </div>
         <RangePicker current={range} />
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Clicks over time</CardTitle>
-          <CardDescription>Daily clicks for this link</CardDescription>
+          <CardTitle>{translate(null, "Links.clicksOverTime", "Clicks over time")}</CardTitle>
+          <CardDescription>{translate(null, "Links.clicksOverTimeSub", "Daily clicks for this link")}</CardDescription>
         </CardHeader>
         <CardContent>
           <ClicksChart data={clicksPerDay} />
@@ -78,12 +79,12 @@ export default async function LinkDetailPage({
 
       <Card>
         <CardHeader>
-          <CardTitle>Top referrers</CardTitle>
-          <CardDescription>Where these clicks came from</CardDescription>
+          <CardTitle>{translate(null, "Links.topReferrers", "Top referrers")}</CardTitle>
+          <CardDescription>{translate(null, "Links.topReferrersSub", "Where these clicks came from")}</CardDescription>
         </CardHeader>
         <CardContent>
           {topReferrers.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No referrer data yet.</p>
+            <p className="text-sm text-muted-foreground">{translate(null, "Links.noReferrerData", "No referrer data yet.")}</p>
           ) : (
             <ul className="flex flex-col gap-3">
               {topReferrers.map((r) => {

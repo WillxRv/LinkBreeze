@@ -21,6 +21,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { translate } from "@/lib/i18n";
+
 export const dynamic = "force-dynamic";
 
 export default async function SettingsPage({
@@ -54,11 +56,10 @@ export default async function SettingsPage({
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
       <div>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Settings
+          {translate(null, "Settings.title")}
         </h1>
         <p className="text-sm text-muted-foreground">
-          Page configuration, SEO and account security for{" "}
-          <span className="font-medium text-foreground">/{slug}</span>
+          {translate(null, "Settings.subtitle")} <span className="font-medium text-foreground">/{slug}</span>
         </p>
       </div>
       <SettingsForm
@@ -81,10 +82,10 @@ export default async function SettingsPage({
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <QrCode className="size-5" />
-            QR Code
+            {translate(null, "Settings.qrCode", "QR Code")}
           </CardTitle>
           <CardDescription>
-            Scan to open /{slug}. Download for print or digital use.
+            {translate(null, "Settings.qrDesc", "Scan to open")} /{slug}. {translate(null, "Settings.qrDownloadHint", "Download for print or digital use.")}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col items-center gap-4">

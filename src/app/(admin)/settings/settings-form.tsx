@@ -20,6 +20,8 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
+import { useLanguage } from "@/components/providers/language-provider";
+
 interface SettingsFormProps {
   pageId?: number;
   slug: string;
@@ -49,6 +51,7 @@ export function SettingsForm({
   themes,
   activeThemeId,
 }: SettingsFormProps) {
+  const { t } = useLanguage();
   const [pending, startTransition] = React.useTransition();
   const [saved, setSaved] = React.useState(false);
   const router = useRouter();
@@ -118,18 +121,18 @@ export function SettingsForm({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Page</CardTitle>
+        <CardTitle>{t("Settings.seo")}</CardTitle>
         <CardDescription>
-          Configure the public URL slug, page title and SEO metadata.
+          {t("Settings.seoSubtitle", "Metadata used when your link-in-bio is shared on social networks or indexed by search engines.")}
         </CardDescription>
       </CardHeader>
       <form action={handleSubmit}>
         <CardContent className="flex flex-col gap-4">
           <FormField
-            label="Page slug"
+            label={t("Settings.slug", "URL Slug")}
             htmlFor="slug"
             required
-            hint={<>Your public page lives at <code>/{slug || "u"}</code></>}
+            hint={<>{t("Settings.slugHint", "Your public page lives at")} <code>/{slug || "u"}</code></>}
           >
             <div className="flex items-center gap-2">
               <span className="text-sm text-muted-foreground">/</span>
@@ -154,69 +157,69 @@ export function SettingsForm({
             </div>
           </FormField>
 
-          <FormField label="Page title (SEO)" htmlFor="title">
+          <FormField label={t("Settings.pageTitle", "Page title (SEO)")} htmlFor="title">
             <Input
               id="title"
               name="title"
               defaultValue={title}
               maxLength={120}
-              placeholder="Jane Doe — Links"
+              placeholder={t("Placeholders.seoTitle")}
             />
           </FormField>
 
-          <FormField label="SEO description" htmlFor="description">
+          <FormField label={t("Settings.seoDescription", "SEO description")} htmlFor="description">
             <Input
               id="description"
               name="description"
               defaultValue={description}
               maxLength={300}
-              placeholder="All my links in one place"
+              placeholder={t("Placeholders.seoDescription")}
             />
           </FormField>
 
-          <FormField label="Footer text (optional)" htmlFor="footerText">
+          <FormField label={t("Settings.footerText", "Footer text (optional)")} htmlFor="footerText">
             <Input
               id="footerText"
               name="footerText"
               defaultValue={footerText}
               maxLength={200}
-              placeholder="© 2026 Jane Doe"
+              placeholder={t("Placeholders.footerText")}
             />
           </FormField>
 
           <FormField
-            label="Analytics script (optional)"
+            label={t("Settings.analyticsScriptLabel", "Analytics script (optional)")}
             htmlFor="analyticsScript"
-            hint={<>Paste a <code>{"<script>"}</code> snippet for Plausible, Umami, Matomo, Google Analytics, etc. It is injected onto your public page only.</>}
+            hint={<>{t("Settings.analyticsHint", "Paste a <script> snippet for Plausible, Umami, Matomo, Google Analytics, etc. It is injected onto your public page only.")}</>}
           >
             <textarea
               id="analyticsScript"
               name="analyticsScript"
               defaultValue={analyticsScript}
               maxLength={2000}
-              placeholder={'<script defer data-domain="example.com" src="https://plausible.io/js/script.js"></script>'}
+              placeholder={t("Placeholders.analyticsScript")}
               className="min-h-[80px] w-full rounded-lg border border-input bg-transparent px-2.5 py-2 font-mono text-sm transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm dark:bg-input/30"
               spellCheck={false}
             />
           </FormField>
 
           <FormField
-            label="Custom CSS (optional)"
+            label={t("Settings.customCssLabel", "Custom CSS (optional)")}
             htmlFor="customCss"
-            hint={<>Raw CSS injected into a <code>{"<style>"}</code> tag on your public page. Use it to fine-tune fonts, spacing or colours.</>}
+            hint={<>{t("Settings.customCssHint", "Raw CSS injected into a <style> tag on your public page. Use it to fine-tune fonts, spacing or colours.")}</>}
           >
             <textarea
               id="customCss"
               name="customCss"
               defaultValue={customCss}
               maxLength={10000}
-              placeholder={"/* Custom styles for your public page */\n:root { --accent: #533fd6; }"}
+              placeholder={t("Placeholders.customCss")}
               className="min-h-[100px] w-full rounded-lg border border-input bg-transparent px-2.5 py-2 font-mono text-sm transition-colors outline-none placeholder:text-muted-foreground focus-visible:border-ring focus-visible:ring-3 focus-visible:ring-ring/50 md:text-sm dark:bg-input/30"
               spellCheck={false}
             />
           </FormField>
 
-          <FormField label="Email capture" htmlFor="emailCapture">
+          <FormField label={t("Settings.emailCapture", "Email capture")} htmlFor="emailCapture">
             <label className="flex items-center gap-2 text-sm">
               <input
                 type="checkbox"
@@ -225,20 +228,24 @@ export function SettingsForm({
                 defaultChecked={emailCapture}
                 className="size-4 rounded border-input"
               />
-              Show email signup form on public page
+              {t("Settings.enableEmailCapture", "Show email signup form on public page")}
             </label>
             {emailCapture && subscriberCount > 0 ? (
               <p className="text-xs text-muted-foreground">
-                {subscriberCount} subscriber{subscriberCount !== 1 ? "s" : ""} ·{" "}
+                {subscriberCount}{" "}
+                {subscriberCount === 1
+                  ? t("Settings.subscriber", "subscriber")
+                  : t("Settings.subscribers", "subscribers")}{" "}
+                ·{" "}
                 <a href="/api/subscribers/export" className="underline" download>
-                  Export CSV
+                  {t("Settings.exportCsv", "Export CSV")}
                 </a>
               </p>
             ) : null}
           </FormField>
 
           {faviconUrl ? (
-            <FormField label="Favicon">
+            <FormField label={t("Settings.favicon", "Favicon")}>
               <div className="flex items-center gap-3">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -247,21 +254,21 @@ export function SettingsForm({
                   className="size-8 rounded border border-border object-contain"
                 />
                 <span className="text-xs text-muted-foreground">
-                  Custom favicon active — saves with settings.
+                  {t("Settings.faviconActive", "Custom favicon active — saves with settings.")}
                 </span>
               </div>
             </FormField>
           ) : null}
 
           <FormField
-            label="Upload favicon (optional)"
+            label={t("Settings.uploadFavicon", "Upload favicon (optional)")}
             htmlFor="faviconUpload"
-            hint="Upload a .ico, .png, .svg, .gif or .webp file (max 1 MB). Overrides the default favicon across the site."
+            hint={t("Settings.uploadFaviconHint", "Upload a .ico, .png, .svg, .gif or .webp file (max 1 MB). Overrides the default favicon across the site.")}
           >
             <div className="flex flex-wrap items-center gap-2">
               <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted">
                 <Upload className="size-4" />
-                {uploadingFavicon ? "Uploading…" : "Upload favicon"}
+                {uploadingFavicon ? t("Settings.uploadingFavicon", "Uploading…") : t("Settings.uploadFavicon", "Upload favicon")}
                 <input
                   type="file"
                   accept=".ico,.png,.svg,.gif,.webp,image/x-icon,image/png,image/svg+xml,image/gif,image/webp"
@@ -279,7 +286,7 @@ export function SettingsForm({
           </FormField>
 
           {themes.length > 0 ? (
-            <FormField label="Active theme">
+            <FormField label={t("Settings.activeTheme", "Active theme")}>
               <div className="flex flex-wrap gap-2">
                 {themes.map((t) => {
                   const isActive =
@@ -308,10 +315,10 @@ export function SettingsForm({
         <CardFooter className="gap-3">
           <Button type="submit" disabled={pending}>
             <Save className="size-4" />
-            {pending ? "Saving…" : "Save settings"}
+            {pending ? t("Settings.saving", "Saving…") : t("Settings.saveSettings", "Save settings")}
           </Button>
           {saved ? (
-            <span className="text-sm text-muted-foreground">Saved!</span>
+            <span className="text-sm text-muted-foreground">{t("Common.saved", "Saved!")}</span>
           ) : null}
         </CardFooter>
       </form>

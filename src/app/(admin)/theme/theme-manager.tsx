@@ -22,6 +22,7 @@ import {
 import { PresetGallery } from "./components/preset-gallery";
 import { ThemeCustomizer } from "./components/theme-customizer";
 import { DuplicateTheme } from "./components/duplicate-theme";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface ThemeManagerProps {
   themes: ThemeRow[];
@@ -32,6 +33,7 @@ interface ThemeManagerProps {
 }
 
 export function ThemeManager({ themes, activeId, active, pageId, pageThemeId }: ThemeManagerProps) {
+  const { t } = useLanguage();
   const [selecting, setSelecting] = React.useState<number | null>(null);
   const [customPending, setCustomPending] = React.useState(false);
   const [customError, setCustomError] = React.useState<string | null>(null);
@@ -99,16 +101,14 @@ export function ThemeManager({ themes, activeId, active, pageId, pageThemeId }: 
   };
 
   const isCustom = active ? !active.isPreset : false;
-
-  // In page mode, highlight the page's selected theme instead of the global active.
   const effectiveActiveId = pageId ? (pageThemeId ?? activeId) : activeId;
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">Theme</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t("Theme.title")}</h1>
         <p className="text-sm text-muted-foreground">
-          Choose a preset or fully customise your page.
+          {t("Theme.subtitle")}
         </p>
       </div>
 
@@ -140,18 +140,17 @@ export function ThemeManager({ themes, activeId, active, pageId, pageThemeId }: 
         </>
       ) : null}
 
-      {/* Delete confirmation dialog — replaces native confirm() */}
       <Dialog open={deleteTarget !== null} onOpenChange={(open) => { if (!open) setDeleteTarget(null); }}>
         <DialogContent showCloseButton={false}>
           <DialogHeader>
-            <DialogTitle>Delete this custom theme?</DialogTitle>
+            <DialogTitle>{t("Theme.deleteTitle", "Delete this custom theme?")}</DialogTitle>
             <DialogDescription>
-              This action cannot be undone. The theme will be permanently removed.
+              {t("Theme.deleteDesc", "This action cannot be undone. The theme will be permanently removed.")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" type="button" onClick={() => setDeleteTarget(null)}>
-              Cancel
+              {t("Common.cancel")}
             </Button>
             <Button
               variant="destructive"
@@ -159,7 +158,7 @@ export function ThemeManager({ themes, activeId, active, pageId, pageThemeId }: 
               disabled={delPending !== null}
               onClick={() => { if (deleteTarget !== null) handleDelete(deleteTarget); }}
             >
-              {delPending !== null ? "Deleting…" : "Delete"}
+              {delPending !== null ? t("Common.deleting", "Deleting…") : t("Common.delete")}
             </Button>
           </DialogFooter>
         </DialogContent>

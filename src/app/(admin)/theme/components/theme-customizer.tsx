@@ -29,23 +29,25 @@ import {
   REVEAL_ANIMATIONS,
   MODE_OPTIONS,
 } from "../theme-constants";
+import { useLanguage } from "@/components/providers/language-provider";
 
 // ─── Section sub-components ────────────────────────────────────────────────
 
 function BackgroundSection({ active }: { active: ThemeRow }) {
+  const { t } = useLanguage();
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-sm font-semibold">Background</h3>
+      <h3 className="text-sm font-semibold">{t("Theme.background", "Background")}</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
         <SelectField
-          label="Type"
+          label={t("Theme.bgType", "Type")}
           name="backgroundType"
           defaultValue={active.backgroundType}
           options={BG_TYPES}
         />
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="backgroundValue" className="text-xs text-muted-foreground">
-            Value (colors separated by commas)
+            {t("Theme.bgValue", "Value (colors separated by commas)")}
           </Label>
           <Input
             id="backgroundValue"
@@ -56,7 +58,7 @@ function BackgroundSection({ active }: { active: ThemeRow }) {
           />
         </div>
         <SelectField
-          label="Angle"
+          label={t("Theme.bgAngle", "Angle")}
           name="backgroundAngle"
           defaultValue={active.backgroundAngle}
           options={BACKGROUND_ANGLES}
@@ -64,7 +66,7 @@ function BackgroundSection({ active }: { active: ThemeRow }) {
         {active.backgroundType === "image" ? (
           <div className="flex flex-col gap-1.5">
             <Label htmlFor="backgroundImageUrl" className="text-xs text-muted-foreground">
-              Image URL
+              {t("Theme.bgImageUrl", "Image URL")}
             </Label>
             <Input
               id="backgroundImageUrl"
@@ -78,12 +80,12 @@ function BackgroundSection({ active }: { active: ThemeRow }) {
       </div>
       <div className="grid grid-cols-2 gap-3">
         <ColorField
-          label="Overlay color"
+          label={t("Theme.overlayColor", "Overlay color")}
           name="overlayColor"
           defaultValue={active.overlayColor}
         />
         <SliderField
-          label="Overlay opacity"
+          label={t("Theme.overlayOpacity", "Overlay opacity")}
           name="overlayOpacity"
           defaultValue={active.overlayOpacity ?? "0"}
           min={0}
@@ -96,10 +98,11 @@ function BackgroundSection({ active }: { active: ThemeRow }) {
 }
 
 function ColorsSection({ active }: { active: ThemeRow }) {
+  const { t } = useLanguage();
   return (
     <section className="flex flex-col gap-3">
       <div className="flex items-center justify-between">
-        <h3 className="text-sm font-semibold">Colors</h3>
+        <h3 className="text-sm font-semibold">{t("Theme.colors", "Colors")}</h3>
         <SelectField
           label=""
           name="mode"
@@ -108,22 +111,23 @@ function ColorsSection({ active }: { active: ThemeRow }) {
         />
       </div>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <ColorField label="Accent (primary)" name="primaryColor" defaultValue={active.primaryColor} />
-        <ColorField label="Secondary" name="secondaryColor" defaultValue={active.secondaryColor} />
-        <ColorField label="Text" name="textColor" defaultValue={active.textColor} />
-        <ColorField label="Muted text" name="mutedTextColor" defaultValue={active.mutedTextColor} />
-        <ColorField label="Card background" name="cardBackground" defaultValue={active.cardBackground} allowRgba />
-        <ColorField label="Card border" name="cardBorderColor" defaultValue={active.cardBorderColor} allowRgba />
-        <ColorField label="Card text" name="cardTextColor" defaultValue={active.cardTextColor} />
+        <ColorField label={t("Theme.primaryColor", "Accent (primary)")} name="primaryColor" defaultValue={active.primaryColor} />
+        <ColorField label={t("Theme.secondaryColor", "Secondary")} name="secondaryColor" defaultValue={active.secondaryColor} />
+        <ColorField label={t("Theme.textColor", "Text")} name="textColor" defaultValue={active.textColor} />
+        <ColorField label={t("Theme.mutedTextColor", "Muted text")} name="mutedTextColor" defaultValue={active.mutedTextColor} />
+        <ColorField label={t("Theme.cardBackground", "Card background")} name="cardBackground" defaultValue={active.cardBackground} allowRgba />
+        <ColorField label={t("Theme.cardBorderColor", "Card border")} name="cardBorderColor" defaultValue={active.cardBorderColor} allowRgba />
+        <ColorField label={t("Theme.cardTextColor", "Card text")} name="cardTextColor" defaultValue={active.cardTextColor} />
       </div>
     </section>
   );
 }
 
 function TypographySection({ active }: { active: ThemeRow }) {
+  const { t } = useLanguage();
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-sm font-semibold">Typography</h3>
+      <h3 className="text-sm font-semibold">{t("Theme.typography", "Typography")}</h3>
       <div className="flex flex-wrap gap-1.5">
         {FONT_OPTIONS.map((font) => (
           <label key={font.id} className="cursor-pointer">
@@ -145,7 +149,7 @@ function TypographySection({ active }: { active: ThemeRow }) {
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <SliderField
-          label="Font scale"
+          label={t("Theme.fontScale", "Font scale")}
           name="fontScale"
           defaultValue={active.fontScale ?? "100"}
           min={80}
@@ -153,13 +157,13 @@ function TypographySection({ active }: { active: ThemeRow }) {
           unit="%"
         />
         <SelectField
-          label="Weight"
+          label={t("Theme.fontWeight", "Weight")}
           name="fontWeight"
           defaultValue={active.fontWeight ?? "500"}
           options={FONT_WEIGHTS}
         />
         <SliderField
-          label="Letter spacing"
+          label={t("Theme.letterSpacing", "Letter spacing")}
           name="letterSpacing"
           defaultValue={active.letterSpacing ?? "0"}
           min={-2}
@@ -172,31 +176,32 @@ function TypographySection({ active }: { active: ThemeRow }) {
 }
 
 function CardStyleSection({ active }: { active: ThemeRow }) {
+  const { t } = useLanguage();
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-sm font-semibold">Card Style</h3>
+      <h3 className="text-sm font-semibold">{t("Theme.cardStyle", "Card Style")}</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         <SelectField
-          label="Link style"
+          label={t("Theme.linkStyle", "Link style")}
           name="linkStyle"
           defaultValue={active.linkStyle}
           options={LINK_STYLES}
         />
         <SelectField
-          label="Hover effect"
+          label={t("Theme.hoverEffect", "Hover effect")}
           name="hoverEffect"
           defaultValue={active.hoverEffect ?? active.animationType}
           options={HOVER_EFFECTS}
         />
         <SelectField
-          label="Button size"
+          label={t("Theme.buttonSize", "Button size")}
           name="buttonSize"
           defaultValue={active.buttonSize ?? "md"}
           options={BUTTON_SIZES}
         />
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="radius" className="text-xs text-muted-foreground">
-            Corner radius
+            {t("Theme.cornerRadius", "Corner radius")}
           </Label>
           <Input
             id="radius"
@@ -208,7 +213,7 @@ function CardStyleSection({ active }: { active: ThemeRow }) {
         </div>
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="borderWidth" className="text-xs text-muted-foreground">
-            Border width
+            {t("Theme.borderWidth", "Border width")}
           </Label>
           <Input
             id="borderWidth"
@@ -219,7 +224,7 @@ function CardStyleSection({ active }: { active: ThemeRow }) {
           />
         </div>
         <SelectField
-          label="Shadow"
+          label={t("Theme.shadow", "Shadow")}
           name="shadowStrength"
           defaultValue={active.shadowStrength ?? "medium"}
           options={SHADOW_STRENGTHS}
@@ -230,13 +235,14 @@ function CardStyleSection({ active }: { active: ThemeRow }) {
 }
 
 function LayoutSection({ active }: { active: ThemeRow }) {
+  const { t } = useLanguage();
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-sm font-semibold">Layout</h3>
+      <h3 className="text-sm font-semibold">{t("Theme.layout", "Layout")}</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="containerWidth" className="text-xs text-muted-foreground">
-            Container width
+            {t("Theme.containerWidth", "Container width")}
           </Label>
           <Input
             id="containerWidth"
@@ -247,13 +253,13 @@ function LayoutSection({ active }: { active: ThemeRow }) {
           />
         </div>
         <SelectField
-          label="Alignment"
+          label={t("Theme.alignment", "Alignment")}
           name="alignment"
           defaultValue={active.alignment ?? "center"}
           options={ALIGNMENTS}
         />
         <SelectField
-          label="Density"
+          label={t("Theme.density", "Density")}
           name="density"
           defaultValue={active.density ?? "normal"}
           options={DENSITIES}
@@ -264,16 +270,17 @@ function LayoutSection({ active }: { active: ThemeRow }) {
 }
 
 function EffectsSection({ active }: { active: ThemeRow }) {
+  const { t } = useLanguage();
   return (
     <section className="flex flex-col gap-3">
-      <h3 className="text-sm font-semibold">Effects</h3>
+      <h3 className="text-sm font-semibold">{t("Theme.effects", "Effects")}</h3>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-        <ToggleField label="Glow" name="glow" defaultValue={active.glow ?? "false"} />
-        <ToggleField label="Noise texture" name="noise" defaultValue={active.noise ?? "false"} />
-        <ColorField label="Glow color" name="glowColor" defaultValue={active.glowColor} />
+        <ToggleField label={t("Theme.glow", "Glow")} name="glow" defaultValue={active.glow ?? "false"} />
+        <ToggleField label={t("Theme.noiseTexture", "Noise texture")} name="noise" defaultValue={active.noise ?? "false"} />
+        <ColorField label={t("Theme.glowColor", "Glow color")} name="glowColor" defaultValue={active.glowColor} />
         <div className="flex flex-col gap-1.5">
           <Label htmlFor="blur" className="text-xs text-muted-foreground">
-            Glass blur
+            {t("Theme.glassBlur", "Glass blur")}
           </Label>
           <Input
             id="blur"
@@ -285,7 +292,7 @@ function EffectsSection({ active }: { active: ThemeRow }) {
         </div>
       </div>
       <SelectField
-        label="Reveal animation"
+        label={t("Theme.revealAnimation", "Reveal animation")}
         name="animationType"
         defaultValue={active.animationType ?? "lift"}
         options={REVEAL_ANIMATIONS}
@@ -311,6 +318,8 @@ export function ThemeCustomizer({
   customError,
   isCustom,
 }: ThemeCustomizerProps) {
+  const { t } = useLanguage();
+
   return (
     <>
       <Separator />
@@ -318,9 +327,11 @@ export function ThemeCustomizer({
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Customise &ldquo;{active.name}&rdquo;</CardTitle>
+              <CardTitle>
+                {t("Theme.customiseTitle", `Customise "${active.name}"`).replace("{name}", active.name)}
+              </CardTitle>
               <CardDescription>
-                Full control over every visual aspect. Changes apply instantly.
+                {t("Theme.customiseDesc", "Full control over every visual aspect. Changes apply instantly.")}
               </CardDescription>
             </div>
             <a
@@ -330,7 +341,7 @@ export function ThemeCustomizer({
               className="inline-flex h-8 items-center gap-1.5 rounded-md border border-border px-3 text-xs font-medium transition-colors hover:bg-accent"
             >
               <Eye className="size-4" />
-              Preview
+              {t("Theme.preview", "Preview")}
             </a>
           </div>
         </CardHeader>
@@ -355,12 +366,12 @@ export function ThemeCustomizer({
             <div className="flex w-full items-center justify-between">
               <p className="text-xs text-muted-foreground">
                 {isCustom
-                  ? "Editing a custom theme"
-                  : "Editing a preset — duplicate it first to keep changes separate"}
+                  ? t("Theme.editingCustom", "Editing a custom theme")
+                  : t("Theme.editingPreset", "Editing a preset — duplicate it first to keep changes separate")}
               </p>
               <Button type="submit" disabled={customPending}>
                 <Save className="size-4" />
-                {customPending ? "Saving…" : "Save changes"}
+                {customPending ? t("Theme.saving", "Saving…") : t("Theme.saveChanges", "Save changes")}
               </Button>
             </div>
           </CardFooter>

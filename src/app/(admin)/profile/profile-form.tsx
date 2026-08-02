@@ -28,6 +28,8 @@ import {
 } from "@/components/ui/select";
 import { Separator } from "@/components/ui/separator";
 
+import { useLanguage } from "@/components/providers/language-provider";
+
 interface ProfileFormProps {
   profile: {
     displayName: string;
@@ -40,6 +42,7 @@ interface ProfileFormProps {
 }
 
 export function ProfileForm({ profile, pageId }: ProfileFormProps) {
+  const { t } = useLanguage();
   const [socialLinks, setSocialLinks] = React.useState<SocialLink[]>(
     profile?.socialLinks ?? [],
   );
@@ -112,17 +115,17 @@ export function ProfileForm({ profile, pageId }: ProfileFormProps) {
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col gap-6">
       <div>
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">Profile</h1>
+        <h1 className="font-heading text-2xl font-semibold tracking-tight">{t("Profile.title", "Profile")}</h1>
         <p className="text-sm text-muted-foreground">
-          This information appears on your public page.
+          {t("Profile.subtitle", "This information appears on your public page.")}
         </p>
       </div>
 
       <form action={handleSubmit} className="flex flex-col gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Details</CardTitle>
-            <CardDescription>Your public identity</CardDescription>
+            <CardTitle>{t("Profile.details", "Details")}</CardTitle>
+            <CardDescription>{t("Profile.publicIdentity", "Your public identity")}</CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="flex items-center gap-4">
@@ -141,19 +144,19 @@ export function ProfileForm({ profile, pageId }: ProfileFormProps) {
                 </div>
               )}
               <div className="flex-1">
-                <FormField label="Avatar URL" htmlFor="avatarUrl">
+                <FormField label={t("Profile.avatarUrl", "Avatar URL")} htmlFor="avatarUrl">
                   <Input
                     id="avatarUrl"
                     name="avatarUrl"
                     value={avatarUrl}
                     onChange={(e) => setAvatarUrl(e.target.value)}
-                    placeholder="https://…/avatar.png"
+                    placeholder={t("Placeholders.imageUrlInput")}
                   />
                 </FormField>
                 <div className="mt-2 flex flex-wrap items-center gap-2">
                   <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-1.5 text-sm font-medium transition-colors hover:bg-muted">
                     <Upload className="size-4" />
-                    {uploading ? "Uploading…" : "Upload image"}
+                    {uploading ? t("Common.uploading", "Uploading…") : t("Common.uploadImage", "Upload image")}
                     <input
                       type="file"
                       accept="image/*"
@@ -169,34 +172,34 @@ export function ProfileForm({ profile, pageId }: ProfileFormProps) {
               </div>
             </div>
 
-            <FormField label="Display name" htmlFor="displayName" required>
+            <FormField label={t("Profile.displayName", "Display name")} htmlFor="displayName" required>
               <Input
                 id="displayName"
                 name="displayName"
                 defaultValue={profile?.displayName ?? ""}
                 required
                 maxLength={80}
-                placeholder="Jane Doe"
+                placeholder={t("Placeholders.pageTitle")}
               />
             </FormField>
 
-            <FormField label="Bio" htmlFor="bio">
+            <FormField label={t("Profile.bio", "Bio")} htmlFor="bio">
               <Input
                 id="bio"
                 name="bio"
                 defaultValue={profile?.bio ?? ""}
-                maxLength={300}
-                placeholder="A short description"
+                maxLength={240}
+                placeholder={t("Placeholders.pageBio")}
               />
             </FormField>
 
-            <FormField label="Badge text (optional)" htmlFor="badgeText">
+            <FormField label={t("Profile.badgeText", "Badge text (optional)")} htmlFor="badgeText">
               <Input
                 id="badgeText"
                 name="badgeText"
                 defaultValue={profile?.badgeText ?? ""}
                 maxLength={40}
-                placeholder="✨ Available for work"
+                placeholder={t("Placeholders.badgeText")}
               />
             </FormField>
           </CardContent>
@@ -204,14 +207,14 @@ export function ProfileForm({ profile, pageId }: ProfileFormProps) {
 
         <Card>
           <CardHeader>
-            <CardTitle>Social links</CardTitle>
+            <CardTitle>{t("Profile.socialLinks", "Social links")}</CardTitle>
             <CardDescription>
-              Icons appear above your link cards. Add the platforms you use.
+              {t("Profile.socialLinksDesc", "Icons appear above your link cards. Add the platforms you use.")}
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-3">
             {socialLinks.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No social links added yet.</p>
+              <p className="text-sm text-muted-foreground">{t("Profile.noSocialLinks", "No social links added yet.")}</p>
             ) : (
               socialLinks.map((item, i) => (
                 <div key={i} className="flex flex-col gap-2 sm:flex-row sm:items-center">
@@ -254,16 +257,16 @@ export function ProfileForm({ profile, pageId }: ProfileFormProps) {
             <Separator className="my-1" />
             <Button variant="outline" type="button" onClick={addSocial} className="w-fit">
               <Plus className="size-4" />
-              Add social link
+              {t("Profile.addSocialLink", "Add social link")}
             </Button>
           </CardContent>
           <CardFooter className="gap-3">
             <Button type="submit" disabled={pending}>
               <Save className="size-4" />
-              {pending ? "Saving…" : "Save profile"}
+              {pending ? t("Profile.saving", "Saving…") : t("Profile.saveProfile", "Save profile")}
             </Button>
             {saved ? (
-              <span className="text-sm text-muted-foreground">Saved!</span>
+              <span className="text-sm text-muted-foreground">{t("Common.saved", "Saved!")}</span>
             ) : null}
           </CardFooter>
         </Card>

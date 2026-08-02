@@ -16,8 +16,10 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import Link from "next/link";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export default function NewPageForm() {
+  const { t } = useLanguage();
   const router = useRouter();
   const [pending, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string | null>(null);
@@ -42,27 +44,27 @@ export default function NewPageForm() {
           className="mb-2 inline-flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
         >
           <ArrowLeft className="size-3.5" />
-          Back to links
+          {t("Pages.backToLinks", "Back to links")}
         </Link>
         <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          New page
+          {t("Pages.newPageTitle", "New page")}
         </h1>
         <p className="text-sm text-muted-foreground">
-          Create a new page with its own links, profile, and theme.
+          {t("Pages.newPageSubtitle", "Create a new page with its own links, profile, and theme.")}
         </p>
       </div>
 
       <form action={handleSubmit} className="flex flex-col gap-6">
         <Card>
           <CardHeader>
-            <CardTitle>Page details</CardTitle>
+            <CardTitle>{t("Pages.pageDetails", "Page details")}</CardTitle>
             <CardDescription>
-              The slug is the URL path. You can customize everything else later.
+              {t("Pages.pageDetailsDesc", "The slug is the URL path. You can customize everything else later.")}
             </CardDescription>
           </CardHeader>
           <CardContent className="flex flex-col gap-4">
             <div className="flex flex-col gap-2">
-              <Label htmlFor="slug">Slug</Label>
+              <Label htmlFor="slug">{t("Pages.slug", "Slug")}</Label>
               <Input
                 id="slug"
                 name="slug"
@@ -72,34 +74,34 @@ export default function NewPageForm() {
                 className="max-w-xs"
               />
               <p className="text-xs text-muted-foreground">
-                Letters, numbers, and hyphens. This becomes your URL: /music
+                {t("Pages.slugHint", "Letters, numbers, and hyphens. This becomes your URL:")} /music
               </p>
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="title">Title (optional)</Label>
+              <Label htmlFor="title">{t("Pages.titleOptional", "Title (optional)")}</Label>
               <Input
                 id="title"
                 name="title"
                 maxLength={80}
-                placeholder="My Music Page"
+                placeholder={t("Placeholders.pageTitle")}
               />
             </div>
 
             <div className="flex flex-col gap-2">
-              <Label htmlFor="bio">Bio (optional)</Label>
+              <Label htmlFor="bio">{t("Pages.bioOptional", "Bio (optional)")}</Label>
               <Input
                 id="bio"
                 name="bio"
                 maxLength={300}
-                placeholder="A short description"
+                placeholder={t("Placeholders.pageBio")}
               />
             </div>
           </CardContent>
           <CardFooter className="gap-3">
             <Button type="submit" disabled={pending}>
               <Plus className="size-4" />
-              {pending ? "Creating…" : "Create page"}
+              {pending ? t("Pages.creating", "Creating…") : t("Pages.createPage", "Create page")}
             </Button>
             {error ? (
               <span className="text-sm text-destructive">{error}</span>

@@ -21,6 +21,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { FormField } from "@/components/ui/form-field";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface MigrationWizardProps {
   pageId: number;
@@ -30,6 +31,7 @@ type Step = "input" | "preview" | "done";
 type Source = "url" | "file";
 
 export function MigrationWizard({ pageId }: MigrationWizardProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [step, setStep] = React.useState<Step>("input");
   const [source, setSource] = React.useState<Source>("url");
@@ -114,25 +116,24 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
         <CardHeader>
           <CardTitle className="flex items-center gap-2">
             <Check className="size-5 text-success" />
-            Import Complete
+            {t("Migration.completeTitle", "Import Complete")}
           </CardTitle>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
           <p className="text-sm text-muted-foreground">
-            Imported <span className="font-bold text-foreground">{importResult.imported}</span> links
-            {importResult.social > 0 && (
-              <>
-                {" "}and <span className="font-bold text-foreground">{importResult.social}</span> social profiles
-              </>
-            )}{" "}
-            into this page.
+            {importResult.social > 0
+              ? t("Migration.completeDesc", `Imported ${importResult.imported} links and ${importResult.social} social profiles into this page.`)
+                  .replace("{imported}", String(importResult.imported))
+                  .replace("{social}", String(importResult.social))
+              : t("Migration.completeDescNoSocial", `Imported ${importResult.imported} links into this page.`)
+                  .replace("{imported}", String(importResult.imported))}
           </p>
           <div className="flex gap-3">
             <Button onClick={reset} variant="outline" size="sm">
-              Import Another
+              {t("Migration.importAnother", "Import Another")}
             </Button>
             <Button onClick={() => router.push("/links")} size="sm">
-              View Links
+              {t("Migration.viewLinks", "View Links")}
             </Button>
           </div>
         </CardContent>
@@ -148,13 +149,13 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            <span>Preview Import</span>
+            <span>{t("Migration.previewTitle", "Preview Import")}</span>
             <span className="rounded-full bg-primary/10 px-3 py-0.5 text-xs font-medium text-primary">
               {result.platform}
             </span>
           </CardTitle>
           <CardDescription>
-            Review the extracted links below. Uncheck any you don&apos;t want to import.
+            {t("Migration.previewDesc", "Review the extracted links below. Uncheck any you don't want to import.")}
           </CardDescription>
         </CardHeader>
         <CardContent className="flex flex-col gap-4">
@@ -166,15 +167,17 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
           )}
 
           {links.length === 0 && socialLinks.length === 0 && (
-            <p className="text-sm text-muted-foreground py-4 text-center">
-              No links found on this page. Try a different URL.
+            <p className="py-4 text-center text-sm text-muted-foreground">
+              {t("Migration.noLinksFound", "No links found on this page. Try a different URL.")}
             </p>
           )}
 
           {/* Page links */}
           {links.length > 0 && (
             <div className="flex flex-col gap-2">
-              <h4 className="text-sm font-medium">Links ({links.filter((l) => l.selected).length}/{links.length})</h4>
+              <h4 className="text-sm font-medium">
+                {t("Migration.linksHeader", "Links")} ({links.filter((l) => l.selected).length}/{links.length})
+              </h4>
               <div className="max-h-[300px] space-y-1 overflow-y-auto">
                 {links.map((link, i) => (
                   <label
@@ -214,7 +217,7 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
           {socialLinks.length > 0 && (
             <div className="flex flex-col gap-2">
               <h4 className="text-sm font-medium">
-                Social Profiles ({socialLinks.filter((l) => l.selected).length}/{socialLinks.length})
+                {t("Migration.socialProfilesHeader", "Social Profiles")} ({socialLinks.filter((l) => l.selected).length}/{socialLinks.length})
               </h4>
               <div className="flex flex-wrap gap-2">
                 {socialLinks.map((link, i) => (
@@ -241,16 +244,18 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
 
           <div className="flex items-center justify-between border-t border-border pt-4">
             <Button variant="outline" size="sm" onClick={reset} disabled={loading}>
-              Back
+              {t("Migration.back", "Back")}
             </Button>
             <Button size="sm" onClick={handleConfirm} disabled={loading || totalSelected === 0}>
               {loading ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" />
-                  Importing...
+                  {t("Migration.importing", "Importing...")}
                 </>
+              ) : totalSelected === 1 ? (
+                t("Migration.importItem", "Import 1 item")
               ) : (
-                `Import ${totalSelected} ${totalSelected === 1 ? "item" : "items"}`
+                t("Migration.importItems", `Import ${totalSelected} items`).replace("{count}", String(totalSelected))
               )}
             </Button>
           </div>
@@ -265,10 +270,10 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <DownloadCloud className="size-5" />
-          Migration Wizard
+          {t("Migration.title", "Migration Wizard")}
         </CardTitle>
         <CardDescription>
-          Import links from Linktree, Bento, Lnk.bio, LittleLink, or any other link-in-bio page.
+          {t("Migration.desc", "Import links from Linktree, Bento, Lnk.bio, LittleLink, or any other link-in-bio page.")}
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -289,7 +294,7 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
             }`}
           >
             <Link2 className="size-4" />
-            URL
+            {t("Migration.urlTab", "URL")}
           </button>
           <button
             type="button"
@@ -299,18 +304,18 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
             }`}
           >
             <FileUp className="size-4" />
-            File
+            {t("Migration.fileTab", "File")}
           </button>
         </div>
 
         {source === "url" ? (
           <form action={handlePreview} className="flex flex-col gap-3">
-            <FormField label="Page URL" htmlFor="import-url" className="mb-2">
+            <FormField label={t("Migration.pageUrl", "Page URL")} htmlFor="import-url" className="mb-2">
               <Input
                 id="import-url"
                 name="url"
                 type="url"
-                placeholder="https://linktr.ee/yourpage"
+                placeholder={t("Migration.pageUrlPlaceholder", "https://linktr.ee/yourpage")}
                 value={url}
                 onChange={(e) => setUrl(e.target.value)}
                 required
@@ -320,12 +325,12 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" />
-                  Fetching links...
+                  {t("Migration.fetching", "Fetching links...")}
                 </>
               ) : (
                 <>
                   <DownloadCloud className="mr-2 size-4" />
-                  Fetch Links
+                  {t("Migration.fetchLinks", "Fetch Links")}
                 </>
               )}
             </Button>
@@ -333,10 +338,10 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
         ) : (
           <form action={handlePreview} className="flex flex-col gap-3">
             <FormField
-              label="HTML or JSON file"
+              label={t("Migration.htmlOrJson", "HTML or JSON file")}
               htmlFor="import-file"
               className="mb-2"
-              hint="Save a competitor page as HTML, or upload a JSON export."
+              hint={t("Migration.htmlOrJsonHint", "Save a competitor page as HTML, or upload a JSON export.")}
             >
               <Input
                 id="import-file"
@@ -350,12 +355,12 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
               {loading ? (
                 <>
                   <Loader2 className="mr-2 size-4 animate-spin" />
-                  Parsing file...
+                  {t("Migration.parsing", "Parsing file...")}
                 </>
               ) : (
                 <>
                   <FileUp className="mr-2 size-4" />
-                  Upload & Extract
+                  {t("Migration.uploadExtract", "Upload & Extract")}
                 </>
               )}
             </Button>
@@ -363,9 +368,9 @@ export function MigrationWizard({ pageId }: MigrationWizardProps) {
         )}
 
         <div className="mt-4 rounded-lg border border-border bg-muted/30 p-3 text-xs text-muted-foreground">
-          <p className="mb-1 font-medium text-foreground">Supported platforms:</p>
-          <p>Linktree, Bento, Lnk.bio, Tap.link, Hopp, LittleLink, Beacons, Solo.to, and more.</p>
-          <p className="mt-2">Social profiles (Instagram, YouTube, etc.) are auto-detected and added as social icons.</p>
+          <p className="mb-1 font-medium text-foreground">{t("Migration.supportedPlatforms", "Supported platforms:")}</p>
+          <p>{t("Migration.supportedPlatformsList", "Linktree, Bento, Lnk.bio, Tap.link, Hopp, LittleLink, Beacons, Solo.to, and more.")}</p>
+          <p className="mt-2">{t("Migration.socialAutoDetectHint", "Social profiles (Instagram, YouTube, etc.) are auto-detected and added as social icons.")}</p>
         </div>
       </CardContent>
     </Card>

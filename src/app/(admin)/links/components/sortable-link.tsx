@@ -19,6 +19,7 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export interface SortableLinkProps {
   link: LinkRow;
@@ -27,6 +28,7 @@ export interface SortableLinkProps {
 }
 
 export function SortableLink({ link, onEdit, onDelete }: SortableLinkProps) {
+  const { t } = useLanguage();
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } =
     useSortable({ id: link.id });
   const router = useRouter();
@@ -68,18 +70,18 @@ export function SortableLink({ link, onEdit, onDelete }: SortableLinkProps) {
               <span className="truncate text-sm font-medium">{link.title}</span>
               {link.isHighlighted ? (
                 <Badge className="shrink-0 border-transparent bg-[var(--aurora-grad)] text-white">
-                  Star
+                  {t("Links.highlighted", "Highlight")}
                 </Badge>
               ) : null}
               {!link.isActive ? (
                 <Badge variant="outline" className="shrink-0">
-                  Hidden
+                  {t("Links.hiddenBadge", "Hidden")}
                 </Badge>
               ) : null}
               {link.scheduleStart || link.scheduleEnd ? (
                 <Badge variant="outline" className="shrink-0 gap-1">
                   <Clock className="size-3" />
-                  Scheduled
+                  {t("Links.scheduled", "Scheduled")}
                 </Badge>
               ) : null}
             </div>
@@ -87,7 +89,7 @@ export function SortableLink({ link, onEdit, onDelete }: SortableLinkProps) {
           </div>
 
           <span className="hidden shrink-0 text-xs tabular-nums text-muted-foreground sm:inline">
-            {link.clicksCount} clicks
+            {link.clicksCount} {t("Links.clicks", "clicks")}
           </span>
 
           <a

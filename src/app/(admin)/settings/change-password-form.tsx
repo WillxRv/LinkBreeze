@@ -14,8 +14,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export function ChangePasswordForm() {
+  const { t } = useLanguage();
   const [pending, startTransition] = React.useTransition();
   const [result, setResult] = React.useState<
     { ok: true } | { ok: false; error: string } | null
@@ -34,13 +36,13 @@ export function ChangePasswordForm() {
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Lock className="size-4" />
-          Change password
+          {t("Settings.changePassword", "Change password")}
         </CardTitle>
-        <CardDescription>Update your admin password.</CardDescription>
+        <CardDescription>{t("Settings.changePasswordDesc", "Update your admin password.")}</CardDescription>
       </CardHeader>
       <form action={handleSubmit}>
         <CardContent className="flex flex-col gap-4">
-          <FormField label="Current password" htmlFor="currentPassword" required>
+          <FormField label={t("Settings.currentPassword", "Current password")} htmlFor="currentPassword" required>
             <Input
               id="currentPassword"
               name="currentPassword"
@@ -50,10 +52,10 @@ export function ChangePasswordForm() {
             />
           </FormField>
           <FormField
-            label="New password"
+            label={t("Settings.newPassword", "New password")}
             htmlFor="newPassword"
             required
-            hint="At least 8 characters with one uppercase letter and one number."
+            hint={t("Settings.newPasswordHint", "At least 8 characters with one uppercase letter and one number.")}
           >
             <Input
               id="newPassword"
@@ -66,7 +68,7 @@ export function ChangePasswordForm() {
           </FormField>
           {result ? (
             result.ok ? (
-              <p className="text-sm text-success">Password updated.</p>
+              <p className="text-sm text-success">{t("Settings.passwordUpdated", "Password updated.")}</p>
             ) : (
               <p className="text-sm text-destructive">{result.error}</p>
             )
@@ -74,7 +76,7 @@ export function ChangePasswordForm() {
         </CardContent>
         <CardFooter>
           <Button type="submit" disabled={pending}>
-            {pending ? "Updating…" : "Update password"}
+            {pending ? t("Settings.updating", "Updating…") : t("Settings.updatePassword", "Update password")}
           </Button>
         </CardFooter>
       </form>

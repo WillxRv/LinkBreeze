@@ -5,6 +5,7 @@ import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { ChevronDown, Plus, FileText, Star, Globe } from "lucide-react";
 import type { PageRow } from "@/server/queries";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface PageSwitcherProps {
   pages: Pick<PageRow, "id" | "slug" | "title" | "isDefault" | "isPublished">[];
@@ -12,6 +13,7 @@ interface PageSwitcherProps {
 }
 
 export function PageSwitcher({ pages, variant = "full" }: PageSwitcherProps) {
+  const { t } = useLanguage();
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -116,7 +118,7 @@ export function PageSwitcher({ pages, variant = "full" }: PageSwitcherProps) {
               className="flex items-center gap-2 rounded-md px-2 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-muted/50 hover:text-foreground"
             >
               <Plus className="size-3.5" />
-              New page
+              {t("Pages.newPage", "New page")}
             </Link>
           </div>
         </div>

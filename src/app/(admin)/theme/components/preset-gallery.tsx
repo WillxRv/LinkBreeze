@@ -4,6 +4,7 @@ import { Check, Palette, Trash2 } from "lucide-react";
 import type { ThemeRow } from "@/server/queries";
 import { Badge } from "@/components/ui/badge";
 import { swatchFor } from "../theme-constants";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface PresetGalleryProps {
   themes: ThemeRow[];
@@ -22,6 +23,8 @@ export function PresetGallery({
   onSelect,
   onDeleteClick,
 }: PresetGalleryProps) {
+  const { t } = useLanguage();
+
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
       {themes.map((theme) => {
@@ -56,12 +59,12 @@ export function PresetGallery({
                 </div>
                 {isActive ? (
                   <Badge className="border-transparent bg-[var(--aurora-grad)] text-white">
-                    <Check className="size-3" /> Active
+                    <Check className="size-3" /> {t("Theme.active", "Active")}
                   </Badge>
                 ) : selecting === theme.id ? (
-                  <span className="text-xs text-muted-foreground">Applying…</span>
+                  <span className="text-xs text-muted-foreground">{t("Theme.applying", "Applying…")}</span>
                 ) : (
-                  <span className="text-xs text-muted-foreground">Use</span>
+                  <span className="text-xs text-muted-foreground">{t("Theme.use", "Use")}</span>
                 )}
               </div>
             </button>
@@ -71,14 +74,14 @@ export function PresetGallery({
                 onClick={() => onDeleteClick(theme.id)}
                 disabled={delPending === theme.id}
                 className="absolute right-1.5 top-1.5 rounded-md bg-black/40 p-1.5 text-white opacity-0 transition-opacity hover:bg-destructive group-hover:opacity-100"
-                title="Delete theme"
+                title={t("Theme.deleteTheme", "Delete theme")}
               >
                 <Trash2 className="size-3.5" />
               </button>
             ) : null}
             {!theme.isPreset ? (
               <span className="absolute left-1.5 top-1.5 rounded bg-black/40 px-1.5 py-0.5 text-[10px] font-medium text-white">
-                Custom
+                {t("Theme.custom", "Custom")}
               </span>
             ) : null}
           </div>

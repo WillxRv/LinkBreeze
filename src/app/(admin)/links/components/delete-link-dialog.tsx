@@ -13,6 +13,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export interface DeleteLinkDialogProps {
   link: LinkRow | null;
@@ -25,6 +26,7 @@ export function DeleteLinkDialog({
   open,
   onOpenChange,
 }: DeleteLinkDialogProps) {
+  const { t } = useLanguage();
   const [pending, startTransition] = React.useTransition();
   const router = useRouter();
 
@@ -43,21 +45,21 @@ export function DeleteLinkDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Delete link?</DialogTitle>
+          <DialogTitle>{t("Links.deleteLink", "Delete link?")}</DialogTitle>
           <DialogDescription>
-            “{link?.title}” will be permanently removed. This cannot be undone.
+            "{link?.title}" {t("Links.deleteLinkDesc", "will be permanently removed. This cannot be undone.")}
           </DialogDescription>
         </DialogHeader>
         <DialogFooter>
           <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
-            Cancel
+            {t("Common.cancel", "Cancel")}
           </Button>
           <Button
             variant="destructive"
             onClick={handleDelete}
             disabled={pending}
           >
-            {pending ? "Deleting…" : "Delete"}
+            {pending ? t("Common.deleting", "Deleting…") : t("Common.delete", "Delete")}
           </Button>
         </DialogFooter>
       </DialogContent>

@@ -7,7 +7,6 @@ import type { LinkGroupRow } from "@/server/queries";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Switch } from "@/components/ui/switch";
 import {
   Dialog,
   DialogContent,
@@ -23,6 +22,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface GroupDialogProps {
   open: boolean;
@@ -32,6 +32,7 @@ interface GroupDialogProps {
 }
 
 export function GroupDialog({ open, onOpenChange, editing, pageId }: GroupDialogProps) {
+  const { t } = useLanguage();
   const [pending, startTransition] = React.useTransition();
   const [error, setError] = React.useState<string | null>(null);
   const router = useRouter();
@@ -67,22 +68,22 @@ export function GroupDialog({ open, onOpenChange, editing, pageId }: GroupDialog
       <DialogContent>
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEdit ? "Edit group" : "Add group"}</DialogTitle>
+            <DialogTitle>{isEdit ? t("Links.editGroup", "Edit group") : t("Links.addGroup", "Add group")}</DialogTitle>
             <DialogDescription>
               {isEdit
-                ? "Update your group settings."
-                : "Groups help you organize links under a common title."}
+                ? t("Links.groupEditSubtitle", "Update your group settings.")
+                : t("Links.groupAddSubtitle", "Groups help you organize links under a common title.")}
             </DialogDescription>
           </DialogHeader>
 
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
-              <Label htmlFor="title">Title</Label>
+              <Label htmlFor="title">{t("Links.groupTitle", "Title")}</Label>
               <Input
                 id="title"
                 name="title"
                 defaultValue={editing?.title ?? ""}
-                placeholder="E.g. My Favorite Tools"
+                placeholder={t("Placeholders.titleInput")}
                 required
               />
             </div>
@@ -97,19 +98,19 @@ export function GroupDialog({ open, onOpenChange, editing, pageId }: GroupDialog
                 className="size-4 rounded border-input"
               />
               <Label htmlFor="linkSearch" className="font-normal cursor-pointer">
-                Enable search box for links in this group
+                {t("Links.groupSearchLabel", "Enable search box for links in this group")}
               </Label>
             </div>
 
             <div className="grid gap-2">
-              <Label htmlFor="columns">Layout Columns</Label>
+              <Label htmlFor="columns">{t("Links.groupColumns", "Layout Columns")}</Label>
               <Select name="columns" defaultValue={editing?.columns ? String(editing.columns) : "1"}>
                 <SelectTrigger>
-                  <SelectValue placeholder="Select columns" />
+                  <SelectValue placeholder={t("Links.groupColumns", "Select columns")} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="1">1 Column</SelectItem>
-                  <SelectItem value="2">2 Columns</SelectItem>
+                  <SelectItem value="1">{t("Links.col1", "1 Column")}</SelectItem>
+                  <SelectItem value="2">{t("Links.col2", "2 Columns")}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -124,10 +125,14 @@ export function GroupDialog({ open, onOpenChange, editing, pageId }: GroupDialog
               onClick={() => onOpenChange(false)}
               disabled={pending}
             >
-              Cancel
+              {t("Common.cancel", "Cancel")}
             </Button>
             <Button type="submit" disabled={pending}>
-              {pending ? "Saving..." : isEdit ? "Save changes" : "Add group"}
+              {pending
+                ? t("Common.saving", "Saving...")
+                : isEdit
+                ? t("Common.saveChanges", "Save changes")
+                : t("Links.addGroup", "Add group")}
             </Button>
           </DialogFooter>
         </form>

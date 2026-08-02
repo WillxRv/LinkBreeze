@@ -32,6 +32,7 @@ import {
   getUrlPlaceholder,
   prefixLinkUrl,
 } from "../link-helpers";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export interface LinkDialogProps {
   open: boolean;
@@ -42,6 +43,7 @@ export interface LinkDialogProps {
 }
 
 export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }: LinkDialogProps) {
+  const { t } = useLanguage();
   const [pending, startTransition] = React.useTransition();
   const [type, setType] = React.useState(editing?.type ?? "url");
   const [groupId, setGroupId] = React.useState(editing?.groupId ? String(editing.groupId) : "none");
@@ -52,8 +54,6 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
   const router = useRouter();
 
   // Reset local form state whenever the dialog opens (or switches target).
-  // Adjusting state during render — instead of in an effect — avoids the
-  // cascading-render anti-pattern.
   const sessionKey = open ? `open:${editing?.id ?? "new"}` : "closed";
   const [lastSession, setLastSession] = React.useState(sessionKey);
   if (sessionKey !== lastSession) {
@@ -72,7 +72,6 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
   const urlPlaceholder = getUrlPlaceholder(type);
 
   const handleSubmit = (formData: FormData) => {
-    // Prepend the correct prefix for non-URL types
     const rawUrl = (formData.get("url") as string) || "";
     formData.set("url", prefixLinkUrl(type, rawUrl));
     formData.set("type", type);
@@ -83,7 +82,6 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
     formData.set("isActive", active ? "on" : "off");
     formData.set("autoIcon", autoIcon ? "on" : "off");
 
-    // If scheduling is toggled off, clear any stale schedule values.
     if (!scheduled) {
       formData.delete("scheduleStart");
       formData.delete("scheduleEnd");
@@ -104,23 +102,23 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{editing ? "Edit link" : "Add link"}</DialogTitle>
+          <DialogTitle>{editing ? t("Links.editLink") : t("Links.addLink")}</DialogTitle>
           <DialogDescription>
-            {editing ? "Update the details of this link." : "Create a new link for your page."}
+            {editing ? t("Links.editSubtitle") : t("Links.addSubtitle")}
           </DialogDescription>
         </DialogHeader>
         <form action={handleSubmit} className="flex flex-col gap-4">
           {editing ? <input type="hidden" name="id" value={editing.id} /> : null}
           {pageId && !editing ? <input type="hidden" name="pageId" value={pageId} /> : null}
 
-          <FormField label="Title" htmlFor="title" required>
+          <FormField label={t("Common.title", "Title")} htmlFor="title" required>
             <Input
               id="title"
               name="title"
               defaultValue={editing?.title ?? ""}
               required
               maxLength={120}
-              placeholder="My website"
+              placeholder={t("Placeholders.titleInput")}
             />
           </FormField>
 
@@ -131,31 +129,31 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
               defaultValue={editing?.url ?? ""}
               required
               maxLength={2048}
-              placeholder={urlPlaceholder}
+              placeholder={urlPlaceholder || t("Placeholders.urlInput")}
             />
           </FormField>
 
-          <FormField label="Description (optional)" htmlFor="description">
+          <FormField label={t("Common.description")} htmlFor="description">
             <Input
               id="description"
               name="description"
               defaultValue={editing?.description ?? ""}
               maxLength={300}
-              placeholder="A short subtitle"
+              placeholder={t("Placeholders.descriptionInput")}
             />
           </FormField>
 
-          <FormField label="Thumbnail image URL (optional)" htmlFor="imageUrl">
+          <FormField label={t("Common.imageUrl")} htmlFor="imageUrl">
             <Input
               id="imageUrl"
               name="imageUrl"
               defaultValue={editing?.imageUrl ?? ""}
               maxLength={2048}
-              placeholder="https://example.com/image.jpg"
+              placeholder={t("Placeholders.imageUrlInput")}
             />
           </FormField>
 
-          <FormField label="Type">
+          <FormField label={t("Links.linkType", "Type")}>
             <Select value={type} onValueChange={(v) => setType(v ?? "url")}>
               <SelectTrigger className="w-full">
                 <SelectValue>
@@ -173,15 +171,17 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
           </FormField>
 
           {groups.length > 0 && (
-            <FormField label="Group (optional)">
+            <FormField label={t("Links.group", "Group (optional)")}>
               <Select value={groupId} onValueChange={(val) => setGroupId(val || "none")}>
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="No group">
-                    {groupId === "none" ? "No group" : groups.find((g) => String(g.id) === groupId)?.title ?? "No group"}
+                  <SelectValue placeholder={t("Links.noGroup", "No group")}>
+                    {groupId === "none"
+                      ? t("Links.noGroup", "No group")
+                      : groups.find((g) => String(g.id) === groupId)?.title ?? t("Links.noGroup", "No group")}
                   </SelectValue>
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="none">No group</SelectItem>
+                  <SelectItem value="none">{t("Links.noGroup", "No group")}</SelectItem>
                   {groups.map((g) => (
                     <SelectItem key={g.id} value={String(g.id)}>
                       {g.title}
@@ -195,27 +195,27 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
           <div className="flex items-center gap-6">
             <label className="flex items-center gap-2 text-sm">
               <Switch checked={highlighted} onCheckedChange={setHighlighted} />
-              Highlight
+              {t("Links.highlighted", "Highlight")}
             </label>
             <label className="flex items-center gap-2 text-sm">
               <Switch checked={active} onCheckedChange={setActive} />
-              Active
+              {t("Links.active", "Active")}
             </label>
             <label className="flex items-center gap-2 text-sm">
               <Switch checked={autoIcon} onCheckedChange={setAutoIcon} />
-              Auto icon
+              {t("Links.autoIcon", "Auto icon")}
             </label>
           </div>
 
           <div className="flex flex-col gap-2">
             <label className="flex items-center gap-2 text-sm">
               <Switch checked={scheduled} onCheckedChange={setScheduled} />
-              Schedule
+              {t("Links.schedule", "Schedule")}
             </label>
             {scheduled ? (
               <div className="flex flex-col gap-2">
                 <div className="flex flex-1 flex-col gap-1">
-                  <span className="text-xs text-muted-foreground">Show from</span>
+                  <span className="text-xs text-muted-foreground">{t("Links.scheduleFrom", "Show from")}</span>
                   <Input
                     type="datetime-local"
                     name="scheduleStart"
@@ -227,7 +227,7 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
                   />
                 </div>
                 <div className="flex flex-1 flex-col gap-1">
-                  <span className="text-xs text-muted-foreground">Hide after</span>
+                  <span className="text-xs text-muted-foreground">{t("Links.scheduleHide", "Hide after")}</span>
                   <Input
                     type="datetime-local"
                     name="scheduleEnd"
@@ -244,10 +244,10 @@ export function LinkDialog({ open, onOpenChange, editing, pageId, groups = [] }:
 
           <DialogFooter>
             <Button variant="outline" type="button" onClick={() => onOpenChange(false)}>
-              Cancel
+              {t("Common.cancel", "Cancel")}
             </Button>
             <Button type="submit" disabled={pending}>
-              {pending ? "Saving…" : "Save"}
+              {pending ? t("Common.saving", "Saving...") : t("Common.saveChanges", "Save changes")}
             </Button>
           </DialogFooter>
         </form>

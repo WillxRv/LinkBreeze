@@ -27,6 +27,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useLanguage } from "@/components/providers/language-provider";
 
 export function DataManager({
   retentionDays,
@@ -35,6 +36,7 @@ export function DataManager({
   retentionDays: string;
   updateCheckEnabled: boolean;
 }) {
+  const { t } = useLanguage();
   const router = useRouter();
   const [restorePending, setRestorePending] = React.useState(false);
   const [restoreMsg, setRestoreMsg] = React.useState<{ ok: boolean; text: string } | null>(null);
@@ -63,12 +65,12 @@ export function DataManager({
       const res = await restoreBackup(fd);
       setRestoreMsg(
         res.success
-          ? { ok: true, text: "Backup restored." }
+          ? { ok: true, text: t("Settings.backupRestored", "Backup restored.") }
           : { ok: false, text: res.error },
       );
       if (res.success) router.refresh();
     } catch {
-      setRestoreMsg({ ok: false, text: "Restore failed." });
+      setRestoreMsg({ ok: false, text: t("Settings.restoreFailed", "Restore failed.") });
     } finally {
       setRestorePending(false);
     }
@@ -80,10 +82,10 @@ export function DataManager({
     setClearMsg(null);
     try {
       const res = await clearAnalytics();
-      setClearMsg(res.success ? "Analytics cleared." : res.error);
+      setClearMsg(res.success ? t("Settings.analyticsCleared", "Analytics cleared.") : res.error);
       if (res.success) router.refresh();
     } catch {
-      setClearMsg("Failed to clear analytics.");
+      setClearMsg(t("Settings.clearFailed", "Failed to clear analytics."));
     } finally {
       setClearPending(false);
     }
@@ -103,10 +105,10 @@ export function DataManager({
       <CardHeader>
         <CardTitle className="flex items-center gap-2">
           <Database className="size-5" />
-          Data
+          {t("Settings.data", "Data")}
         </CardTitle>
         <CardDescription>
-          Back up or restore your content, and control analytics retention.
+          {t("Settings.dataDesc", "Back up or restore your content, and control analytics retention.")}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-6">
@@ -118,11 +120,11 @@ export function DataManager({
               className="inline-flex items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted"
             >
               <Download className="size-4" />
-              Export backup
+              {t("Settings.exportBackup", "Export backup")}
             </a>
             <label className="inline-flex cursor-pointer items-center gap-2 rounded-lg border border-border px-3 py-2 text-sm font-medium transition-colors hover:bg-muted">
               <Upload className="size-4" />
-              {restorePending ? "Restoring…" : "Restore backup"}
+              {restorePending ? t("Settings.restoring", "Restoring…") : t("Settings.restoreBackup", "Restore backup")}
               <input
                 type="file"
                 accept="application/json,.json"
@@ -148,17 +150,17 @@ export function DataManager({
             className="w-fit text-destructive hover:text-destructive"
           >
             <Trash2 className="size-4" />
-            {clearPending ? "Clearing…" : "Clear all analytics"}
+            {clearPending ? t("Settings.clearing", "Clearing…") : t("Settings.clearAnalytics", "Clear all analytics")}
           </Button>
           {clearMsg ? (
-            <p className={clearMsg.includes("cleared") ? "text-sm text-success" : "text-sm text-destructive"}>
+            <p className={clearMsg.includes("cleared") || clearMsg.includes("limpos") ? "text-sm text-success" : "text-sm text-destructive"}>
               {clearMsg}
             </p>
           ) : null}
         </div>
 
         <form action={handleRetention} className="flex flex-col gap-2">
-          <Label htmlFor="retention">Analytics retention (days)</Label>
+          <Label htmlFor="retention">{t("Settings.retentionLabel", "Analytics retention (days)")}</Label>
           <div className="flex items-center gap-2">
             <Input
               id="retention"
@@ -166,27 +168,27 @@ export function DataManager({
               min={0}
               value={retention}
               onChange={(e) => setRetentionValue(e.target.value)}
-              placeholder="0 = keep forever"
+              placeholder={t("Settings.retentionPlaceholder", "0 = keep forever")}
               className="max-w-48"
             />
             <Button type="submit" variant="outline" disabled={retentionPending}>
               <Save className="size-4" />
-              {retentionPending ? "Saving…" : "Save"}
+              {retentionPending ? t("Settings.saving", "Saving…") : t("Common.save", "Save")}
             </Button>
           </div>
           <p className="text-xs text-muted-foreground">
-            Older analytics are pruned automatically. 0 keeps everything.
+            {t("Settings.retentionHint", "Older analytics are pruned automatically. 0 keeps everything.")}
           </p>
           {retentionSaved ? (
-            <p className="text-sm text-success">Saved!</p>
+            <p className="text-sm text-success">{t("Common.saved", "Saved!")}</p>
           ) : null}
         </form>
 
         <div className="flex items-center justify-between gap-3 border-t border-border pt-4">
           <div>
-            <p className="text-sm font-medium">Update notifications</p>
+            <p className="text-sm font-medium">{t("Settings.updateNotifications", "Update notifications")}</p>
             <p className="text-xs text-muted-foreground">
-              Check for new releases on the dashboard.
+              {t("Settings.updateNotificationsDesc", "Check for new releases on the dashboard.")}
             </p>
           </div>
           <label className="relative inline-flex cursor-pointer items-center">
@@ -208,17 +210,17 @@ export function DataManager({
       <Dialog open={pendingFile !== null} onOpenChange={(open) => { if (!open) setPendingFile(null); }}>
         <DialogContent showCloseButton={false}>
           <DialogHeader>
-            <DialogTitle>Restore backup?</DialogTitle>
+            <DialogTitle>{t("Settings.restoreConfirmTitle", "Restore backup?")}</DialogTitle>
             <DialogDescription>
-              This will REPLACE all current links, profile, settings and themes. This cannot be undone.
+              {t("Settings.restoreConfirmDesc", "This will REPLACE all current links, profile, settings and themes. This cannot be undone.")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" type="button" onClick={() => setPendingFile(null)}>
-              Cancel
+              {t("Common.cancel", "Cancel")}
             </Button>
             <Button variant="destructive" type="button" onClick={confirmRestore}>
-              Restore
+              {t("Settings.restore", "Restore")}
             </Button>
           </DialogFooter>
         </DialogContent>
@@ -228,17 +230,17 @@ export function DataManager({
       <Dialog open={clearOpen} onOpenChange={setClearOpen}>
         <DialogContent showCloseButton={false}>
           <DialogHeader>
-            <DialogTitle>Clear all analytics?</DialogTitle>
+            <DialogTitle>{t("Settings.clearConfirmTitle", "Clear all analytics?")}</DialogTitle>
             <DialogDescription>
-              Permanently delete ALL analytics (views + clicks) and reset click counters. This cannot be undone.
+              {t("Settings.clearConfirmDesc", "Permanently delete ALL analytics (views + clicks) and reset click counters. This cannot be undone.")}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
             <Button variant="outline" type="button" onClick={() => setClearOpen(false)}>
-              Cancel
+              {t("Common.cancel", "Cancel")}
             </Button>
             <Button variant="destructive" type="button" onClick={handleClear}>
-              Clear
+              {t("Settings.clear", "Clear")}
             </Button>
           </DialogFooter>
         </DialogContent>

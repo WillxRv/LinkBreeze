@@ -10,6 +10,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface DuplicateThemeProps {
   activeName: string;
@@ -26,19 +27,21 @@ export function DuplicateTheme({
   setDupName,
   dupPending,
 }: DuplicateThemeProps) {
+  const { t } = useLanguage();
+
   return (
     <Card className="mx-auto w-full max-w-2xl">
       <CardHeader>
-        <CardTitle className="text-base">Duplicate theme</CardTitle>
+        <CardTitle className="text-base">{t("Theme.duplicateTitle", "Duplicate theme")}</CardTitle>
         <CardDescription>
-          Save a copy of &ldquo;{activeName}&rdquo; as a new custom theme you can edit freely.
+          {t("Theme.duplicateDesc", `Save a copy of "${activeName}" as a new custom theme you can edit freely.`).replace("{name}", activeName)}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex items-center gap-2">
         <Input
           value={dupName}
           onChange={(e) => setDupName(e.target.value)}
-          placeholder={`${activeName} (copy)`}
+          placeholder={t("Theme.duplicatePlaceholder", `${activeName} (copy)`).replace("{name}", activeName)}
           onKeyDown={(e) => {
             if (e.key === "Enter") {
               e.preventDefault();
@@ -49,7 +52,7 @@ export function DuplicateTheme({
         />
         <Button onClick={onDuplicate} disabled={dupPending || !dupName.trim()}>
           <Copy className="size-4" />
-          {dupPending ? "Copying…" : "Duplicate"}
+          {dupPending ? t("Theme.copying", "Copying…") : t("Theme.duplicate", "Duplicate")}
         </Button>
       </CardContent>
     </Card>

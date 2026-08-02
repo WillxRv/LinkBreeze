@@ -29,6 +29,8 @@ import { DeleteGroupDialog } from "./components/delete-group-dialog";
 import { Settings, Trash2 } from "lucide-react";
 import type { LinkGroupRow } from "@/server/queries";
 
+import { useLanguage } from "@/components/providers/language-provider";
+
 export function LinksManager({
   initialLinks,
   initialGroups,
@@ -38,6 +40,7 @@ export function LinksManager({
   initialGroups: LinkGroupRow[];
   pageId?: number;
 }) {
+  const { t } = useLanguage();
   const [items, setItems] = React.useState<LinkRow[]>(initialLinks);
   const [groups, setGroups] = React.useState<LinkGroupRow[]>(initialGroups);
   const [dialogOpen, setDialogOpen] = React.useState(false);
@@ -72,12 +75,6 @@ export function LinksManager({
     const { active, over } = event;
     if (!over || active.id === over.id) return;
 
-    // Compute the reordered array from prev inside setItems so we read the
-    // current (non-stale) state. Use the same array for both state update and
-    // persistence — previously `items.map(...)` below read the stale closure
-    // value, sending the OLD order to the server. The result is captured in a
-    // holder object because TS control-flow narrowing keeps a `let` pinned to
-    // its initial value across a callback assignment.
     const result: { value: LinkRow[] | null } = { value: null };
     setItems((prev) => {
       const oldIndex = prev.findIndex((l) => l.id === active.id);
@@ -132,20 +129,20 @@ export function LinksManager({
       <div className="flex items-center justify-between">
         <div>
           <h1 className="font-heading text-2xl font-semibold tracking-tight">
-            Links
+            {t("Links.title")}
           </h1>
           <p className="text-sm text-muted-foreground">
-            Add, edit, and reorder the links on your page.
+            {t("Links.subtitle")}
           </p>
         </div>
         <div className="flex items-center gap-2">
           <Button variant="outline" onClick={openCreateGroup}>
             <Plus className="size-4" />
-            Add group
+            {t("Links.addGroup", "Add group")}
           </Button>
           <Button onClick={openCreate}>
             <Plus className="size-4" />
-            Add link
+            {t("Links.addLink")}
           </Button>
         </div>
       </div>
@@ -154,11 +151,11 @@ export function LinksManager({
         <Card>
           <CardContent className="flex flex-col items-center gap-3 py-12 text-center">
             <p className="text-sm text-muted-foreground">
-              No links yet. Add your first link to get started.
+              {t("Links.noLinks")}
             </p>
             <Button onClick={openCreate}>
               <Plus className="size-4" />
-              Add link
+              {t("Links.addLink")}
             </Button>
           </CardContent>
         </Card>
@@ -189,7 +186,7 @@ export function LinksManager({
                     <h3 className="font-medium">{group.title}</h3>
                     {group.linkSearch && (
                       <span className="rounded bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground uppercase">
-                        Search enabled
+                        {t("Links.searchEnabled", "Search enabled")}
                       </span>
                     )}
                   </div>
@@ -207,7 +204,7 @@ export function LinksManager({
                   <SortableContext items={groupLinks.map((l) => l.id)} strategy={verticalListSortingStrategy}>
                     <div className="flex flex-col gap-2 mt-4">
                       {groupLinks.length === 0 ? (
-                        <p className="py-4 text-center text-sm text-muted-foreground">No links in this group.</p>
+                        <p className="py-4 text-center text-sm text-muted-foreground">{t("Links.noLinksInGroup", "No links in this group.")}</p>
                       ) : (
                         groupLinks.map((link) => (
                           <SortableLink key={link.id} link={link} onEdit={openEdit} onDelete={openDelete} />

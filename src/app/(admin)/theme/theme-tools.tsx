@@ -12,16 +12,14 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import type { ThemeRow } from "@/server/queries";
+import { useLanguage } from "@/components/providers/language-provider";
 
 interface ThemeToolsProps {
   themes: ThemeRow[];
 }
 
-/**
- * Export (download .json) and import (upload .json) themes. Pure client-side:
- * export hits the auth-gated API route, import reads the file and POSTs it.
- */
 export function ThemeTools({ themes }: ThemeToolsProps) {
+  const { t } = useLanguage();
   const inputRef = React.useRef<HTMLInputElement>(null);
   const [error, setError] = React.useState<string | null>(null);
   const [busy, setBusy] = React.useState(false);
@@ -29,8 +27,6 @@ export function ThemeTools({ themes }: ThemeToolsProps) {
 
   const handleExport = (id: number) => {
     setError(null);
-    // Trigger a download via a temporary anchor so the browser uses the
-    // Content-Disposition filename set by the API route.
     const a = document.createElement("a");
     a.href = `/api/themes/export?id=${id}`;
     a.rel = "noopener";
@@ -46,7 +42,6 @@ export function ThemeTools({ themes }: ThemeToolsProps) {
 
   const handleFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    // Always reset so picking the same file twice still fires onChange.
     e.target.value = "";
     if (!file) return;
 
@@ -73,34 +68,32 @@ export function ThemeTools({ themes }: ThemeToolsProps) {
   return (
     <Card className="mx-auto w-full max-w-xl">
       <CardHeader>
-        <CardTitle>Import &amp; export</CardTitle>
+        <CardTitle>{t("Theme.importExportTitle", "Import & export")}</CardTitle>
         <CardDescription>
-          Download a theme as a .json file to back it up or share it, then
-          re-import on any LinkBreeze instance. Imported themes are added as
-          inactive copies.
+          {t("Theme.importExportDesc", "Download a theme as a .json file to back it up or share it, then re-import on any LinkBreeze instance. Imported themes are added as inactive copies.")}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-medium">Export a theme</span>
+          <span className="text-sm font-medium">{t("Theme.exportTheme", "Export a theme")}</span>
           <div className="flex flex-wrap gap-2">
-            {themes.map((t) => (
+            {themes.map((tItem) => (
               <Button
-                key={t.id}
+                key={tItem.id}
                 type="button"
                 variant="outline"
                 size="sm"
-                onClick={() => handleExport(t.id)}
+                onClick={() => handleExport(tItem.id)}
               >
                 <Download className="size-4" />
-                {t.name}
+                {tItem.name}
               </Button>
             ))}
           </div>
         </div>
 
         <div className="flex flex-col gap-2">
-          <span className="text-sm font-medium">Import a theme</span>
+          <span className="text-sm font-medium">{t("Theme.importTheme", "Import a theme")}</span>
           <input
             ref={inputRef}
             type="file"
@@ -115,10 +108,10 @@ export function ThemeTools({ themes }: ThemeToolsProps) {
             disabled={busy}
           >
             <Upload className="size-4" />
-            {busy ? "Importing…" : "Choose JSON file…"}
+            {busy ? t("Theme.importing", "Importing…") : t("Theme.chooseJson", "Choose JSON file…")}
           </Button>
           <p className="text-xs text-muted-foreground">
-            Select a theme .json file you previously exported from LinkBreeze.
+            {t("Theme.importHint", "Select a theme .json file you previously exported from LinkBreeze.")}
           </p>
         </div>
 

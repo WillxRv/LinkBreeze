@@ -67,7 +67,7 @@ describe("createLink", () => {
   it("creates a link with a groupId", async () => {
     const res = await createLink(makeFormData({ title: "My Link", url: "https://example.com", type: "url", isActive: "true", isHighlighted: "false", groupId: "123" }));
     expect(res.success).toBe(true);
-    const [payload] = mocks.createLink.mock.calls[0];
+    const [payload] = mocks.createLink.mock.calls[0] as any[];
     expect(payload.groupId).toBe(123);
   });
 
@@ -113,7 +113,7 @@ describe("updateLink", () => {
   it("updates a link with a groupId", async () => {
     const res = await updateLink(makeFormData({ id: "1", title: "Updated", url: "https://new.com", type: "url", isActive: "true", isHighlighted: "false", groupId: "456" }));
     expect(res.success).toBe(true);
-    const [, payload] = mocks.updateLink.mock.calls[0];
+    const [, payload] = mocks.updateLink.mock.calls[0] as any[];
     expect(payload.groupId).toBe(456);
   });
 

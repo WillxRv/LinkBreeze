@@ -12,19 +12,24 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-const NAV: { href: string; label: string; icon: LucideIcon }[] = [
-  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/links", label: "Links", icon: LinkIcon },
-  { href: "/profile", label: "Profile", icon: User },
-  { href: "/theme", label: "Theme", icon: Palette },
-  { href: "/settings", label: "Settings", icon: Settings },
-];
+
+
+import { useLanguage } from "@/components/providers/language-provider";
 
 /** Sidebar nav that preserves the ?page= param across admin sections. */
 export function AdminNav() {
   const searchParams = useSearchParams();
   const pageParam = searchParams.get("page");
   const query = pageParam ? `?page=${pageParam}` : "";
+  const { t } = useLanguage();
+
+  const NAV: { href: string; key: string; icon: LucideIcon }[] = [
+    { href: "/dashboard", key: "Nav.dashboard", icon: LayoutDashboard },
+    { href: "/links", key: "Nav.links", icon: LinkIcon },
+    { href: "/profile", key: "Nav.pages", icon: User },
+    { href: "/theme", key: "Nav.theme", icon: Palette },
+    { href: "/settings", key: "Nav.settings", icon: Settings },
+  ];
 
   return (
     <nav className="flex flex-1 flex-col gap-1">
@@ -35,7 +40,7 @@ export function AdminNav() {
           className="flex items-center gap-2.5 rounded-lg px-2.5 py-2 text-sm text-muted-foreground transition-all hover:translate-x-0.5 hover:bg-violet/15 hover:text-lavender"
         >
           <item.icon className="size-4" />
-          {item.label}
+          {t(item.key)}
         </Link>
       ))}
     </nav>

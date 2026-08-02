@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useLanguage } from "@/components/providers/language-provider";
 
 /**
  * Client-side link search box.
@@ -12,6 +13,7 @@ import * as React from "react";
  * data-description attributes without any server round-trips.
  */
 export function LinkSearch({ groupId }: { groupId?: number }) {
+  const { t } = useLanguage();
   const [query, setQuery] = React.useState("");
 
   const filterLinks = (q: string) => {
@@ -73,10 +75,10 @@ export function LinkSearch({ groupId }: { groupId?: number }) {
         type="search"
         value={query}
         onChange={handleChange}
-        placeholder="Search links…"
+        placeholder={t("Placeholders.searchLinks", "Search here…")}
         autoComplete="off"
         spellCheck={false}
-        aria-label="Search links"
+        aria-label={t("Placeholders.searchLinks", "Search here")}
         style={{
           width: "100%",
           boxSizing: "border-box",
@@ -116,7 +118,7 @@ export function LinkSearch({ groupId }: { groupId?: number }) {
       {query ? (
         <button
           type="button"
-          aria-label="Clear search"
+          aria-label={t("Common.clearSearch", "Clear search")}
           onClick={() => {
             setQuery("");
             filterLinks("");

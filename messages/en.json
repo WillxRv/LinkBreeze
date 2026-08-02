@@ -39,10 +39,11 @@
     "saveChanges": "Save changes",
     "uploading": "Uploading…",
     "uploadImage": "Upload image",
-    "saved": "Saved!"
+    "saved": "Saved!",
+    "clearSearch": "Clear search"
   },
   "Placeholders": {
-    "searchLinks": "Search links...",
+    "searchLinks": "Search here...",
     "urlInput": "https://example.com",
     "emailInput": "you@example.com",
     "phoneInput": "+1 (555) 000-0000",

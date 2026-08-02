@@ -124,6 +124,7 @@ export function ThemeManager({ themes, activeId, active, pageId, pageThemeId }: 
       {active ? (
         <>
           <ThemeCustomizer
+            key={active.id}
             active={active}
             onCustomize={handleCustom}
             customPending={customPending}
@@ -131,6 +132,7 @@ export function ThemeManager({ themes, activeId, active, pageId, pageThemeId }: 
             isCustom={isCustom}
           />
           <DuplicateTheme
+            key={`dup-${active.id}`}
             activeName={active.name}
             onDuplicate={handleDuplicate}
             dupName={dupName}

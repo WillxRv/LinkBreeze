@@ -23,6 +23,11 @@ export function ColorField({
   allowRgba?: boolean;
 }) {
   const [val, setVal] = React.useState(defaultValue || "");
+
+  React.useEffect(() => {
+    setVal(defaultValue || "");
+  }, [defaultValue]);
+
   return (
     <div className="flex flex-col gap-1.5">
       <Label htmlFor={name} className="text-xs text-muted-foreground">
@@ -55,15 +60,21 @@ export function SelectField({
   defaultValue,
   options,
 }: {
-  label: string;
+  label?: string;
   name: string;
   defaultValue?: string | null;
   options: { value: string; label: string }[];
 }) {
+  const [val, setVal] = React.useState<string | undefined>(defaultValue || undefined);
+
+  React.useEffect(() => {
+    setVal(defaultValue || undefined);
+  }, [defaultValue]);
+
   return (
     <div className="flex flex-col gap-1.5">
-      <Label className="text-xs text-muted-foreground">{label}</Label>
-      <Select name={name} defaultValue={defaultValue || undefined}>
+      {label ? <Label className="text-xs text-muted-foreground">{label}</Label> : null}
+      <Select name={name} value={val} onValueChange={(v) => setVal(v || undefined)}>
         <SelectTrigger className="w-full">
           <SelectValue placeholder="Select…" />
         </SelectTrigger>
@@ -89,6 +100,11 @@ export function ToggleField({
   defaultValue?: string | null;
 }) {
   const [on, setOn] = React.useState(defaultValue === "true");
+
+  React.useEffect(() => {
+    setOn(defaultValue === "true");
+  }, [defaultValue]);
+
   return (
     <div className="flex items-center justify-between gap-2">
       <Label className="text-xs text-muted-foreground">{label}</Label>
@@ -131,6 +147,11 @@ export function SliderField({
 }) {
   const numVal = parseInt(defaultValue || "100", 10);
   const [val, setVal] = React.useState(numVal);
+
+  React.useEffect(() => {
+    setVal(parseInt(defaultValue || "100", 10));
+  }, [defaultValue]);
+
   return (
     <div className="flex flex-col gap-1.5">
       <div className="flex items-center justify-between">
